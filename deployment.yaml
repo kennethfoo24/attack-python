@@ -51,7 +51,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: jonlimpw/k8pybackend:latest-marvel
+        image: kennethfoo24/attack-python:578727d193aaa6f4efb8abed3fa9c3185e2bf745
         imagePullPolicy: Always
         name: avengers-security-python
         ports:
