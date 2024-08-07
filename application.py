@@ -28,19 +28,20 @@ def generateRandomId():
 ## Routes ## 
 
 @application.route('/api/getRequest', methods=['GET'])
-@tracer.wrap(service="getRequest", resource="getRequest")
+@tracer.wrap(service="flask_getRequest", resource="getRequest")
 def get_request():
-    log.info('Security Request!')
-    log.info('Security Request!')
+    log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
+    log.info('GET request successful to URL: https://api.example.com/api/getRequest')
     tracer.set_tags({'information': 'This is a custom value from a get request'})
     database_query("This is a simulated attack by impersonating user-agents")
     return jsonify('Simulated attack by impersonating user-agents')
 
 
 @application.route('/api/postRequest', methods=['POST'])
-@tracer.wrap(service="postRequest", resource="postRequest")
+@tracer.wrap(service="flask_postRequest", resource="postRequest")
 def post_request():
-    log.info('post request called!')
+    log.info('Initiating POST request to URL: https://api.example.com/api/postRequest')
+    log.info('POST request successful to URL: https://api.example.com/api/postRequest')
     tracer.set_tags({'information': 'This is a custom value from a post request'})
     tracer.set_tags({'usr.id': generateRandomId()})
     data = request.json
@@ -49,9 +50,10 @@ def post_request():
 
 
 @application.route('/api/getErrorRequest', methods=['GET'])
-@tracer.wrap(service="errorRequest", resource="errorRequest")
+@tracer.wrap(service="flask_errorRequest", resource="errorRequest")
 def error_request():
-    log.info('error request called!')
+    log.info('ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest')
+    log.info('ERROR - Reattempt failed on GET request to URL: https://api.example.com/api/getErrorRequest')
     tracer.set_tags({'information': 'ERROR ERROR!!'})
     tracer.set_tags({'data': "some kind of error here..."})
     error_trigger()
@@ -63,14 +65,15 @@ def error_request():
 @tracer.wrap(service="postgres", resource="query")
 def database_query(data):
     time.sleep(1)
-    log.info('database called!')
+    log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
+    log.info('Query execution time: 0.15 seconds ')
     tracer.set_tags({'data': data})
     return 
 
-@tracer.wrap(service="perculiar_function", resource="SOS")
+@tracer.wrap(service="cordelia_function", resource="CordeliaLoopInit")
 def error_trigger():
     time.sleep(1)
-    log.info('strange function called...')
+    log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
     tracer.set_tags({'data': "error"})
     raise ValueError("error!")
 
