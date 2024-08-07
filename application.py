@@ -33,6 +33,7 @@ def get_request():
     log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
     log.info('GET request successful to URL: https://api.example.com/api/getRequest')
     tracer.set_tags({'information': 'This is a custom value from a get request'})
+    tracer.set_tags({'UUID': generateRandomId()})
     database_query("This is a simulated attack by impersonating user-agents")
     return jsonify('Simulated attack by impersonating user-agents')
 
@@ -56,7 +57,9 @@ def error_request():
     log.info('ERROR - Reattempt failed on GET request to URL: https://api.example.com/api/getErrorRequest')
     tracer.set_tags({'information': 'ERROR ERROR!!'})
     tracer.set_tags({'data': "some kind of error here..."})
+    tracer.set_tags({'UUID': generateRandomId()})
     error_trigger()
+    log.error(e, stack_info=True, exc_info=True)
     return jsonify("error triggered")
     
 
@@ -68,6 +71,7 @@ def database_query(data):
     log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
     log.info('Query execution time: 0.15 seconds ')
     tracer.set_tags({'data': data})
+    tracer.set_tags({'UUID': generateRandomId()})
     return 
 
 @tracer.wrap(service="cordelia_function", resource="CordeliaLoopInit")
@@ -75,7 +79,8 @@ def error_trigger():
     time.sleep(1)
     log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
     tracer.set_tags({'data': "error"})
-    raise ValueError("error!")
+    tracer.set_tags({'UUID': generateRandomId()})
+    raise ValueError("Error: Traceback (most recent call last): File example.py, line 12, in <module> function_a() ZeroDivisionError: division by zero")
 
 
 if __name__ == '__main__':
