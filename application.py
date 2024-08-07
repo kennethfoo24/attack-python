@@ -28,7 +28,7 @@ def generateRandomId():
 ## Routes ## 
 
 @application.route('/api/getRequest', methods=['GET'])
-@tracer.wrap(service="getRequest", resource="getRequest")
+@tracer.wrap(service="flask-getRequest", resource="getRequest")
 def get_request():
     log.info('Security Request!')
     tracer.set_tags({'information': 'This is a custom value from a get request'})
@@ -37,7 +37,7 @@ def get_request():
 
 
 @application.route('/api/postRequest', methods=['POST'])
-@tracer.wrap(service="postRequest", resource="postRequest")
+@tracer.wrap(service="flask-postRequest", resource="postRequest")
 def post_request():
     log.info('post request called!')
     tracer.set_tags({'information': 'This is a custom value from a post request'})
@@ -48,9 +48,9 @@ def post_request():
 
 
 @application.route('/api/getErrorRequest', methods=['GET'])
-@tracer.wrap(service="errorRequest", resource="errorRequest")
+@tracer.wrap(service="flask-errorRequest", resource="errorRequest")
 def error_request():
-    log.info('error request called!')
+    log.error('error request called!')
     tracer.set_tags({'information': 'ERROR ERROR!!'})
     tracer.set_tags({'data': "some kind of error here..."})
     error_trigger()
@@ -59,19 +59,19 @@ def error_request():
 
 ## Functions ##
 
-@tracer.wrap(service="postgres", resource="query")
+@tracer.wrap(service="postgres", resource="SELECT * FROM Sessions WHERE User_id = Kenneth")
 def database_query(data):
-    time.sleep(1)
-    log.info('database called!')
+    time.sleep(0)
+    log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id ')
     tracer.set_tags({'data': data})
     return 
 
-@tracer.wrap(service="perculiar_function", resource="SOS")
+@tracer.wrap(service="cordelia-function", resource="CordeliaLoopController#python")
 def error_trigger():
     time.sleep(1)
-    log.info('strange function called...')
+    log.error('strange function called...')
     tracer.set_tags({'data': "error"})
-    raise ValueError("error!")
+    raise ValueError("Error: Traceback (most recent call last): File "example.py", line 12, in <module> function_a() ZeroDivisionError: division by zero")
 
 
 if __name__ == '__main__':
