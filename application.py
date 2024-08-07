@@ -52,8 +52,8 @@ def post_request():
 @application.route('/api/getErrorRequest', methods=['GET'])
 @tracer.wrap(service="flask-errorRequest", resource="errorRequest")
 def error_request():
-    log.error('ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest')
-    log.error('ERROR - Reattempt failed on GET request to URL: https://api.example.com/api/getErrorRequest')
+    log.info('ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest')
+    log.info('ERROR - Reattempt failed on GET request to URL: https://api.example.com/api/getErrorRequest')
     tracer.set_tags({'information': 'ERROR! ERROR!'})
     tracer.set_tags({'data': "some kind of error here..."})
     tracer.set_tags({'uuid': generateRandomId()})
@@ -74,7 +74,7 @@ def database_query(data):
 @tracer.wrap(service="cordelia-function", resource="CordeliaLoopController#python")
 def error_trigger():
     time.sleep(1)
-    log.error('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
+    log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
     tracer.set_tags({'data': "error"})
     raise ValueError("Error: Traceback (most recent call last): File "example.py", line 12, in <module> function_a() ZeroDivisionError: division by zero")
 
