@@ -23,7 +23,7 @@ ENV PORT=5500
 EXPOSE 5500
 
 ARG DD_GIT_COMMIT_SHA
-ENV DD_TAGS="git.repository_url:github.com/jon94/k8python,git.commit.sha:${DD_GIT_COMMIT_SHA}"
+ENV DD_TAGS="git.repository_url:github.com/kennethfoo24/attack-python,git.commit.sha:${DD_GIT_COMMIT_SHA}"
 ENV DD_APPSEC_ENABLED=true
 
 
