@@ -58,12 +58,12 @@ def error_request():
     tracer.set_tags({'data': "some kind of error here..."})
     tracer.set_tags({'uuid': generateRandomId()})
     error_trigger()
-    return jsonify("error triggered")
+    return jsonify("ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest")
     
 
 ## Functions ##
 
-@tracer.wrap(service="postgres", resource="SELECT * FROM Sessions WHERE User_id = Kenneth")
+@tracer.wrap(service="postgres", resource="SELECT_postgres")
 def database_query(data):
     time.sleep(0)
     log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
