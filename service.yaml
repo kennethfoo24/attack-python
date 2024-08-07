@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaskpython-service
+  namespace: python
+spec:
+  selector:
+    run: flaskpython
+  ports:
+    - protocol: TCP
+      port: 5500  # Port to expose
+      targetPort: 5500  # Port on the container
+  type: LoadBalancer  # Use LoadBalancer to expose externally (requires cloud provider support)
