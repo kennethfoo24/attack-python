@@ -62,7 +62,7 @@ def error_request():
 
 ## Functions ##
 
-@tracer.wrap(service="postgres", resource="query")
+@tracer.wrap(service="postgres", resource="SELECT * FROM Sessions WHERE User_id")
 def database_query(data):
     time.sleep(1)
     log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
