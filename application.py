@@ -62,7 +62,6 @@ def error_request():
     log.error(e, stack_info=True, exc_info=True)
     return jsonify("error triggered")
     
-
 ## Functions ##
 
 @tracer.wrap(service="postgres", resource="SELECT * FROM Sessions WHERE User_id")
