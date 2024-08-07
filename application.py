@@ -18,6 +18,7 @@ requests = req.Session()
 application = Flask(__name__)
 CORS(application)
 
+
 ## ASM User ID Tracking ##
 ## Use camelcase instead of snakecase for functions > pick up by Datadog SCA
 
@@ -27,21 +28,19 @@ def generateRandomId():
 ## Routes ## 
 
 @application.route('/api/getRequest', methods=['GET'])
-@tracer.wrap(service="flask-getRequest", resource="getRequest")
+@tracer.wrap(service="getRequest", resource="getRequest")
 def get_request():
-    log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
-    log.info('GET request successful to URL: https://api.example.com/api/getRequest')
+    log.info('Security Request!')
+    log.info('Security Request!')
     tracer.set_tags({'information': 'This is a custom value from a get request'})
-    tracer.set_tags({'uuid': generateRandomId()})
     database_query("This is a simulated attack by impersonating user-agents")
     return jsonify('Simulated attack by impersonating user-agents')
 
 
 @application.route('/api/postRequest', methods=['POST'])
-@tracer.wrap(service="flask-postRequest", resource="postRequest")
+@tracer.wrap(service="postRequest", resource="postRequest")
 def post_request():
-    log.info('Initiating POST request to URL: https://api.example.com/api/postRequest')
-    log.info('POST request successful to URL: https://api.example.com/api/postRequest')
+    log.info('post request called!')
     tracer.set_tags({'information': 'This is a custom value from a post request'})
     tracer.set_tags({'usr.id': generateRandomId()})
     data = request.json
@@ -50,33 +49,30 @@ def post_request():
 
 
 @application.route('/api/getErrorRequest', methods=['GET'])
-@tracer.wrap(service="flask-errorRequest", resource="errorRequest")
+@tracer.wrap(service="errorRequest", resource="errorRequest")
 def error_request():
-    log.info('ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest')
-    log.info('ERROR - Reattempt failed on GET request to URL: https://api.example.com/api/getErrorRequest')
-    tracer.set_tags({'information': 'ERROR! ERROR!'})
+    log.info('error request called!')
+    tracer.set_tags({'information': 'ERROR ERROR!!'})
     tracer.set_tags({'data': "some kind of error here..."})
-    tracer.set_tags({'uuid': generateRandomId()})
     error_trigger()
-    return jsonify("ERROR - Error during GET request to URL: https://api.example.com/api/getErrorRequest")
+    return jsonify("error triggered")
     
 
 ## Functions ##
 
-@tracer.wrap(service="postgres", resource="SELECT_postgres")
+@tracer.wrap(service="postgres", resource="query")
 def database_query(data):
-    time.sleep(0)
-    log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
-    log.info('Query execution time: 0.15 seconds ')
+    time.sleep(1)
+    log.info('database called!')
     tracer.set_tags({'data': data})
     return 
 
-@tracer.wrap(service="cordelia-function", resource="CordeliaLoopController#python")
+@tracer.wrap(service="perculiar_function", resource="SOS")
 def error_trigger():
     time.sleep(1)
-    log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
+    log.info('strange function called...')
     tracer.set_tags({'data': "error"})
-    raise ValueError("Error: Traceback (most recent call last): File "example.py", line 12, in <module> function_a() ZeroDivisionError: division by zero")
+    raise ValueError("error!")
 
 
 if __name__ == '__main__':
