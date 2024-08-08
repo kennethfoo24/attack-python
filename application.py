@@ -73,7 +73,7 @@ def database_query(data):
     tracer.set_tags({'UUID': generateRandomId()})
     return 
 
-@tracer.wrap(service="cordelia_function", resource="CordeliaLoopInit")
+@tracer.wrap(service="cordelia_function", resource="cordeliaLoopInit")
 def error_trigger():
     ## time.sleep(1) ##
     log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
