@@ -66,7 +66,7 @@ def error_request():
 
 @tracer.wrap(service="postgres", resource="SELECT * FROM Sessions WHERE User_id")
 def database_query(data):
-    time.sleep(1)
+    ## time.sleep(1) ##
     log.info('Query executed successfully: SELECT * FROM Sessions WHERE User_id')
     log.info('Query execution time: 0.15 seconds ')
     tracer.set_tags({'data': data})
@@ -75,7 +75,7 @@ def database_query(data):
 
 @tracer.wrap(service="cordelia_function", resource="CordeliaLoopInit")
 def error_trigger():
-    time.sleep(1)
+    ## time.sleep(1) ##
     log.info('ERROR - GET initiated cordelia loop error | Status Code: 500 | Data Length: 452 bytes | syntax malformed')
     tracer.set_tags({'data': "error"})
     tracer.set_tags({'UUID': generateRandomId()})
