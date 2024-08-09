@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, logging
 from ddtrace import tracer, patch; patch(logging=True)
+from ddtrace.contrib.trace_utils import set_user
 from flask_cors import CORS
 import requests as req
 import time
@@ -30,8 +31,14 @@ def generateRandomId():
 @application.route('/api/getRequest', methods=['GET'])
 @tracer.wrap(service="flask_getRequest", resource="getRequest")
 def get_request():
-    log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
-    log.info('GET request successful to URL: https://api.example.com/api/getRequest')
+    username = request.headers.get('X-Username')
+    if username:
+        log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
+        log.info('GET request successful to URL: https://api.example.com/api/getRequest')
+        set_user(tracer, username, event="Datadog Live", session_id="session_id", propagate=True)
+    else:
+        log.info('username not found. Received request with no username')
+
     tracer.set_tags({'information': 'This is a custom value from a get request'})
     tracer.set_tags({'UUID': generateRandomId()})
     database_query("This is a simulated attack by impersonating user-agents")
