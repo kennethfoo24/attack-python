@@ -35,7 +35,7 @@ def get_request():
         if username:
             log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
             log.info('GET request successful to URL: https://api.example.com/api/getRequest')
-            set_user(tracer, username, event="Datadog Live", session_id="session_id", propagate=True)
+            set_user(tracer, username, session_id="session_id", propagate=True)
         else:
             log.info('username not found. Received request with no username')
 
