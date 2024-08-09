@@ -19,7 +19,6 @@ requests = req.Session()
 application = Flask(__name__)
 CORS(application)
 
-
 ## ASM User ID Tracking ##
 ## Use camelcase instead of snakecase for functions > pick up by Datadog SCA
 
@@ -31,19 +30,22 @@ def generateRandomId():
 @application.route('/api/getRequest', methods=['GET'])
 @tracer.wrap(service="flask_getRequest", resource="getRequest")
 def get_request():
-    username = request.headers.get('X-Username')
-    if username:
-        log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
-        log.info('GET request successful to URL: https://api.example.com/api/getRequest')
-        set_user(tracer, username, event="Datadog Live", session_id="session_id", propagate=True)
-    else:
-        log.info('username not found. Received request with no username')
+    try:
+        username = request.headers.get('X-Username')
+        if username:
+            log.info('Initiating GET request to URL: https://api.example.com/api/getRequest')
+            log.info('GET request successful to URL: https://api.example.com/api/getRequest')
+            set_user(tracer, username, event="Datadog Live", session_id="session_id", propagate=True)
+        else:
+            log.info('username not found. Received request with no username')
 
-    tracer.set_tags({'information': 'This is a custom value from a get request'})
-    tracer.set_tags({'UUID': generateRandomId()})
-    database_query("This is a simulated attack by impersonating user-agents")
-    return jsonify('Simulated attack by impersonating user-agents')
-
+        tracer.set_tags({'information': 'This is a custom value from a get request'})
+        tracer.set_tags({'UUID': generateRandomId()})
+        database_query("This is a simulated attack by impersonating user-agents")
+        return jsonify('Simulated attack by impersonating user-agents')
+    except Exception as e:
+        log.error(f"Error occurred: {e}", exc_info=True)
+        return jsonify({"error": str(e)}), 500
 
 @application.route('/api/postRequest', methods=['POST'])
 @tracer.wrap(service="flask_postRequest", resource="postRequest")
