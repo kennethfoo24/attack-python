@@ -7,6 +7,8 @@ import time
 import logging
 import sys
 import uuid
+import psycopg2
+import os
 
 FORMAT = ('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
           '[dd.service=%(dd.service)s dd.env=%(dd.env)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
@@ -18,6 +20,21 @@ log.level = logging.INFO
 requests = req.Session()
 application = Flask(__name__)
 CORS(application)
+
+# Database connection configuration using environment variables
+db_config = {
+    'user': os.getenv('DB_USER'),
+    'password': os.getenv('DB_PASSWORD'),
+    'host': os.getenv('DB_HOST'),
+    'database': os.getenv('DB_NAME'),
+    'port': os.getenv('DB_PORT')
+}
+
+# Connect to the database
+def get_db_connection():
+    conn = psycopg2.connect(**db_config)
+    log.info("python successfully connected to postgres database")
+    return conn
 
 ## ASM User ID Tracking ##
 ## Use camelcase instead of snakecase for functions > pick up by Datadog SCA
@@ -70,6 +87,28 @@ def error_request():
     error_trigger()
     log.error(e, stack_info=True, exc_info=True)
     return jsonify("error triggered")
+
+@application.route('/security-submit', methods=['POST'])
+def security_submit():
+    user_input = request.json['userInput']
+    query = f"{user_input}"  # Vulnerable SQL query (for demonstration purposes only)
+    print(f"Executing query: {query}")
+    log.info(f'Executing query: {query}')
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(query)
+        results = cursor.fetchall()
+        conn.commit()
+        return jsonify(results)
+    except Exception as e:
+        print(f"Database error: {e}")
+        return "Database error", 500
+    finally:
+        cursor.close()
+        conn.close()
+
     
 ## Functions ##
 
