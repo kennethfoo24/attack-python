@@ -88,7 +88,7 @@ def error_request():
     log.error(e, stack_info=True, exc_info=True)
     return jsonify("error triggered")
 
-@app.route('/security-submit', methods=['POST'])
+@application.route('/security-submit', methods=['POST'])
 def security_submit():
     user_input = request.json['userInput']
     query = f"{user_input}"  # Vulnerable SQL query (for demonstration purposes only)
