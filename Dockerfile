@@ -39,6 +39,10 @@ ENV DD_IAST_ENABLED=true
 ENV DD_RUNTIME_METRICS_ENABLED=true
 ENV DD_TRACE_STARTUP_LOGS=true
 
+ENV DB_USER=admin
+ENV DB_HOST=35.232.212.199
+ENV DB_NAME=userdb
+ENV DB_PORT=5432
 
 ENTRYPOINT ["ddtrace-run"]
 CMD ["ddtrace-run", "python3", "application.py"] 

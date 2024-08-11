@@ -33,6 +33,7 @@ db_config = {
 # Connect to the database
 def get_db_connection():
     conn = psycopg2.connect(**db_config)
+    log.info("python successfully connected to postgres database")
     return conn
 
 ## ASM User ID Tracking ##
