@@ -45,10 +45,10 @@ spec:
         - name: DD_RUNTIME_METRICS_ENABLED
           value: "true"
         - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: db-password
-                key: db-password
+          valueFrom:
+            secretKeyRef:
+              name: db-password
+              key: db-password
         - name: DD_TRACE_DEBUG
           value: "true"
         - name: DD_AGENT_HOST
@@ -56,7 +56,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: kennethfoo24/attack-python:1dd4266681918392c523b3de1d71a919969cf84a
+        image: kennethfoo24/attack-python:e0de8689973caf053f8acc00573e4a50f7c88ba4
         imagePullPolicy: Always
         name: avengers-security-python
         ports:
