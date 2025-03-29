@@ -9,7 +9,7 @@ metadata:
     tags.datadoghq.com/service: avengers-security-python
     tags.datadoghq.com/version: 1.0.2
   name: avengers-security-python
-  namespace: marvel-python-backend
+  namespace: marvel
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -56,7 +56,7 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: status.hostIP
-        image: kennethfoo24/attack-python:c0cb81c97f873c445977ff1b9ad3869bbc056fee
+        image: kennethfoo24/attack-python:cc0534528686cf2fbff969483ad55b744078b080
         imagePullPolicy: Always
         name: avengers-security-python
         ports:
